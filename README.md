@@ -25,7 +25,6 @@ import * as React from "react";
 
 Finally, since `di-react` is using `reflect-metadata`, we need to ensure that the typescript compiler options are enabled in your `tsconfig.json`.
 ```json
-// tsconfig.json
 {
     "compilerOptions": {
         "emitDecoratorMetadata": true,
@@ -97,7 +96,7 @@ export class UserApi {
 }
 ```
 
-This will also create an instance in the service container for the `Connection` too when requesting the `UserApi`.
+This will also create an instance in the service container for the `Connection` when requesting the `UserApi`.
 > Note: Services are only created once, even if they are dependencies of other services. So in the above example, any service dependent on the `Connection` will get the same instance.
 
 ### Interface dependencies
@@ -123,7 +122,7 @@ export class UserApi {
 This allows for more clean tests, where you can test the service with another implementation of the `ConnectionInterface`, while in your application you get the `FetchConnection`.
 
 ### Value dependencies
-In the cases, you might need dependencies that are not services, but values, this can be done using `InjectionToken` values. These let you specify the value or factory how to be created. You can then use the `@Inject()` decorator on the constructor arguments to let the container know to use the injection token instead of a service reference.
+In other cases, you might need dependencies that are not services, but values, this can be done using `InjectionToken` values. These let you specify the value or factory how to be created. You can then use the `@Inject()` decorator on the constructor arguments to let the container know to use the injection token instead of a service reference.
 
 Creating a token with a value.
 ```typescript
@@ -152,7 +151,7 @@ export class UserApi {
 ```
 
 ## Acknowledgements
-* This library takes a lot of inspiration from the Angular, which also contains a Dependency Injection tool.  
+* This library takes a lot of inspiration from the Angular, which also contains a Dependency Injection tool. This library tries to bring that same functionally to React.
 
 ## FAQ
 ### Why is there no way to inspect the registered service definitions?
@@ -165,13 +164,21 @@ An upside to this, is that is allows services to be tree-shaken and put into laz
 ### Why should I use this library over any other DI one?
 Library choice is always a choice, so feel free to select whatever you prefer and works best in your specific use-case. However, below are listed some popular other libraries and how they compare to this one.
 
+All of them lack the React support out of the box, however, adding your own is relatively trivial or even not needed.
+
 #### [InversifyJS](https://github.com/inversify/InversifyJS)
 InversionJs is well maintained, however, it requires explicit container configuration. This means that all services need to be registered manually, possibly creating less tree-shakeable services in the process. Moreover, it makes it harder to maintain lazy loading of chunks with services.
 
 The upside of more explicit container configuration is that is allowing for more features, which this library will never support. One of them is Multi-injection, where you fetch all services which match a specific criteria. This only works if you know all services upfront.
 
+Has a third party library which offers react support https://github.com/org-redtea/react-inversify
+
 #### [tsyringe](https://github.com/microsoft/tsyringe)
-Tsyringe is somewhat maintained, allthrough progress has slowed down. The main difference is that it only support a single global container. This means it is hard to swap out for unit tests.
+Tsyringe is somewhat maintained, although not a lot of changes have occurred in the past year. The main difference is that it only support a single global container. This means it is hard to swap out for unit tests.
+
+It does offer more features than this library, such as transformers. It also offers more control over how instances are handled, where it is possible to get a new instance every time a service is requested. This library only works with shared instances (singletons).
+
+Does not have React integration, however, due to the way containers need to be explicly setup, it's easy to do for tests. 
 
 #### [typedi](https://github.com/typestack/typedi)
-Typedi comes closes with respect to the current feature set. However, it seems to be [unmaintained](https://github.com/typestack/typedi/issues/1235).
+Typedi is similar with respect to the current feature set of this library. However, it seems to be [unmaintained](https://github.com/typestack/typedi/issues/1235).
