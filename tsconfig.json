@@ -3,6 +3,7 @@
     "include": ["src/**/*"],
     "exclude": [
         "**/*.spec.ts",
+        "**/*.spec.tsx",
         "src/__fixtures__"
     ],
     "compilerOptions": {
