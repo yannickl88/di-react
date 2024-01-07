@@ -11,11 +11,7 @@ jobs:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
         with:
-          always-auth: true
           node-version: 21
-          cache: 'yarn'
-          registry-url: https://registry.npmjs.org
-          scope: '@yannickl88'
       - run: yarn
       - run: yarn test
       - run: yarn build
